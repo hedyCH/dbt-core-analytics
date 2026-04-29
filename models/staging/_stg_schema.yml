@@ -1,0 +1,57 @@
+version: 2
+
+sources:
+  - name: jaffle_shop
+    database: dbt-jaffle-shop-492217    # your GCP project ID
+    schema: dbtdev                   # your raw dataset
+    tables:
+      - name: customers
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+          - name: first_name
+            tests:
+              - not_null
+          - name: last_name
+            tests:
+              - not_null
+
+      - name: orders
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+          - name: user_id
+            tests:
+              - not_null
+              - relationships:
+                  to: source('jaffle_shop', 'customers')
+                  field: id
+          - name: status
+            tests:
+              - accepted_values:
+                  values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+
+      - name: payment_native
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+          - name: orderid
+            tests:
+              - not_null
+              - relationships:
+                  to: source('jaffle_shop', 'orders')
+                  field: id
+          - name: paymentmethod
+            tests:
+              - accepted_values:
+                  values: ['credit_card', 'coupon', 'bank_transfer', 'gift_card']
+          - name: status
+            tests:
+              - accepted_values:
+                  values: ['success', 'fail']

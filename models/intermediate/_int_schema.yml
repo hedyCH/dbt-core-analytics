@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: int_orders_joined
+    description: "Orders joined with payments"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+      - name: amount
+        tests:
+          - not_null
