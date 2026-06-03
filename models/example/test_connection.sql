@@ -1,1 +1,0 @@
-SELECT 1 as id, 'Snowflake is connected' as status
